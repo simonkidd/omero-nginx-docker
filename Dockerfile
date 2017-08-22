@@ -1,5 +1,5 @@
 # Builder (stage 0)
-FROM openmicroscopy/omero-web
+FROM dpwrussell/omero-web-extended
 
 ARG PYTHONPATH=/opt/omero/web/venv/lib/python2.7/site-packages/:/opt/omero/web/OMERO.web/lib/python/
 
@@ -17,6 +17,7 @@ COPY --from=0 /opt/omero/web/nginx_omero-web.conf /etc/nginx/conf.d/omero-web.co
 RUN sed -i.bak -re 's/( default_server.*)/; #\1/' /etc/nginx/nginx.conf \
     && mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.disabled
 
+ADD ms-thumbnails_upstream.conf ms-thumbnails_locations.conf ms-image-region_upstream.conf ms-image-region_locations.conf /etc/nginx/
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
